@@ -1,39 +1,30 @@
 import Model from "../models/Model.js"
 import { isAlphaNumeric } from "../utils/isAlphanumeric.js";
+import {isNumber} from "../utils/isNumber.js"
+import {isInt} from "../utils/isInt.js"
+import {isString} from "../utils/isString.js"
+
 
 class Service{
     model = new Model()
 
-    getAllFraseService = async ()=>{
+    getAllJuegosService = async ()=>{
         try {
-            const data = this.model.getFrase();
-            const frase = data.map((obj)=>obj.palabra).join(' ')
-            return frase;
+            const data = this.model.getJuegos();
+            return data;
         } catch (error) {
-            throw error;
+            console.error(error);
         }
     }
 
-    createPalabrasApi = async(cantidad)=>{
-        try{
-            const api = await fetch(`https://texto.deno.dev/palabras?cantidad=${cantidad}`)
-            const data  = await api.json()
-            const palabras = data.palabras
-            const respuesta = this.model.createBulk(palabras)
-            return respuesta;
-        }catch(error){
-            console.error(error)
-        }
-    }
-
-    createService = async (palabra)=>{
+    createJuegoService = async (nombre,categoria,precio,cantidad)=>{
         try {
-            if(isAlphaNumeric(palabra)){
-                console.log(palabra)
-                const palabraGuardada = this.model.create(palabra)
-                return palabraGuardada;
+            if(isAlphaNumeric(nombre) && isString(nombre) && isString(categoria) && isNumber(precio) && (precio>0) && isInt(cantidad) &&(cantidad>0)){
+                const juego = {"nombre":nombre,"categoria":categoria,"precio":precio,"cantidad":cantidad}
+                const juegoGuardado = this.model.createJuego(juego)
+                return juegoGuardado;
             }else{
-                throw new Error('no valida')
+                throw new Error('Los datos ingresados no son válidos')
             }
             
         } catch (error) {
@@ -41,19 +32,20 @@ class Service{
         }
     }
 
-    removeService = async (palabra)=>{
+    createVentaService = async (id,cantidad)=>{
         try {
-            if(isAlphaNumeric(palabra)){
-                const palabraEliminada = this.model.remove(palabra)
-                return palabraEliminada;
+            if(isInt(id) && (id>0) && isInt(cantidad) &&(cantidad>0)){
+                const ventaGuardada = this.model.createVenta(id,cantidad)
+                return ventaGuardada;
             }else{
-                throw new Error('no valida')
+                throw new Error('Los datos ingresados no son válidos')
             }
             
         } catch (error) {
             throw error;
         }
     }
+
 
 }
 

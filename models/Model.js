@@ -1,39 +1,44 @@
 class Model{
-    data = [{'id':1,"palabra":"perro"},{'id':2,"palabra":"compu"}]
+    juegos = [{"id":1,"nombre":"TEG","categoria":"estrategia","precio":20003.23,"cantidad":34},
+        {"id":2,"nombre":"Pictionary","categoria":"familiar","precio":12010.04,"cantidad":10}
+    ]
+    ventas = []
 
-    getFrase = ()=>{
-        return this.data;
+
+    getJuegos = ()=>{
+        return this.juegos;
     }
 
-    create = (palabra)=>{
-        const id = this.data[this.data.length-1].id + 1
-        const obj = {id,palabra}
-        this.data.push(obj)
-        return "ok"
+    createJuego = (juego)=>{
+        const id = this.juegos[this.juegos.length-1].id + 1
+        const obj = {id,juego}
+        this.juegos.push(obj)
+        return obj
     }
 
-    createBulk = (palabras)=>{
-        console.log(palabras)
-        palabras.forEach(palabra => {
-            const id = this.data[this.data.length-1].id + 1
-            const obj = {id,palabra}
-            console.log(obj)
-            this.data.push(obj)
-        });
-
-        return "ok"
+    createVenta = (id,cantidad)=>{
+        try{
+              if(id<=this.juegos.length){
+                const juego = this.juegos.find((juego)=>juego.id===id)
+                if(cantidad<=juego.cantidad){
+                    juego.cantidad = juego.cantidad - cantidad
+                    const obj = {"idJuego":id,"cantidad":cantidad}
+                    this.ventas.push(obj)
+                    return obj
+                }else{
+                    throw new Error("Los datos ingresados no son válidos")
+                }
+                
+             }else{
+              throw new Error("Los datos ingresados no son válidos")
+             }
+         }
+         catch(error){
+            throw error
+         }
     }
 
-    remove = (palabra)=>{
-        const dataFiltrada = this.data.filter((p) => p.palabra!=palabra)
-        if(this.data.length>dataFiltrada.length){
-            this.data = dataFiltrada
-            return palabra
-        }else{
-            throw new Error('palabra no encontrada')
-        }
-    
-    }
+
 
 }
 

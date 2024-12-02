@@ -1,0 +1,1 @@
+export const isInt = data =>data === parseInt(data, 10);

@@ -5,57 +5,49 @@ class Controller{
 
     service = new Service()
 
-    getAllFrase = async(req,res) =>{
+    getAllJuegos = async(req,res) =>{
         try{
-            const data = await this.service.getAllFraseService()
+            const data = await this.service.getAllJuegosService()
             res
                 .status(200)
                 .send({success:true,message:data})
 
         }catch(error){
-            res.status(400).send({success:false,message:error.message})
+            res.status(400).send({success:false,errorMsg:error.message})
         }
     }
 
 
-    createPalabrasApi = async(req,res) =>{
+    createJuego = async(req,res)=>{
         try{
+            const {nombre} = req.body
+            const{categoria} = req.body
+            const{precio} = req.body
             const{cantidad} = req.body
-            const data = await this.service.createPalabrasApi(cantidad)
+            const data = await this.service.createJuegoService(nombre,categoria,precio,cantidad)
             res
                 .status(200)
                 .send({success:true,message:data})
 
         }catch(error){
-            res.status(400).send({success:false,message:error.message})
+            res.status(422).send({success:false,errorMsg:error.message})
         }
     }
 
-    create = async(req,res)=>{
+    createVenta = async(req,res)=>{
         try{
-            const {palabra} = req.body
-            const data = await this.service.createService(palabra)
+            const {id} = req.body
+            const{cantidad} = req.body
+            const data = await this.service.createVentaService(id,cantidad)
             res
                 .status(200)
                 .send({success:true,message:data})
 
         }catch(error){
-            res.status(422).send({success:false,message:error.message})
+            res.status(422).send({success:false,errorMsg:error.message})
         }
     }
 
-    remove = async(req,res)=>{
-        try{
-            const {palabra} = req.body
-            const data = await this.service.removeService(palabra)
-            res
-                .status(200)
-                .send({success:true,message:data})
-
-        }catch(error){
-            res.status(422).send({success:false,message:error.message})
-        }
-    }
 
 }
 
